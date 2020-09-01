@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
+
+    public int borderSize;
+
     [SerializeField]
     private int m_width;
     [SerializeField]
@@ -18,6 +21,7 @@ public class Board : MonoBehaviour
     {
         m_allTiles = new Tile[m_width, m_height];
         SetupTiles();
+        SetupCamera();
     }
 
     // Update is called once per frame
@@ -39,7 +43,20 @@ public class Board : MonoBehaviour
                 m_allTiles[i, j] = tile.GetComponent<Tile>();
 
                 tile.transform.parent = transform;
+
+
             }
         }
+    }
+
+    void SetupCamera()
+    {
+        Camera.main.transform.position = new Vector3((float)(m_width - 1) / 2f, (float)(m_height -1) / 2f, -10f);
+
+        float aspectRatio = (float)Screen.width / (float)Screen.height;
+        float verticalSize = (float)m_height / 2f + (float)borderSize;
+        float horizontalSize = ((float)m_width / 2f + (float)borderSize) / aspectRatio;
+
+        Camera.main.orthographicSize = (verticalSize > horizontalSize) ? verticalSize : horizontalSize;
     }
 }
